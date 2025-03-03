@@ -1,0 +1,100 @@
+let todoItemsContainer = document.getElementById("todoItemsContainer")
+let addtodobutton = document.getElementById("addtodobutton")
+let todo = [{
+        text: "learn HTML",
+        uniqueno: 1
+    },
+    {
+        text: "learn css",
+        uniqueno: 2
+    }, {
+        text: "learn js",
+        uniqueno: 3
+    }
+]
+
+
+
+
+function ontodostatuschange(checkboxid, labelid) {
+    let checkboxelement = document.getElementById(checkboxid)
+    console.log(checkboxelement.checked)
+    let labelelement = document.getElementById(labelid)
+    labelelement.classList.toggle("checked")
+    //if (checkboxelement.checked===true){
+    //labelelement.classList.add("checked")
+    //}
+    //else{
+    //    labelelement.classList.remove("checked")
+    //}
+}
+
+function ondeletetodo(todoid) {
+    let todoelement = document.getElementById(todoid)
+    todoItemsContainer.removeChild(todoelement) //removin todoelements from todocontainer
+}
+
+function createandappend(todo) {
+
+    let checkboxid = "checkbox" + todo.uniqueno
+    let labelid = "label" + todo.uniqueno
+    let todoid = "todo" + todo.uniqueno
+    let todoelement = document.createElement("li")
+    todoelement.id = todoid
+    todoelement.classList.add("todo-items-container", "d-flex", "flex-row")
+    todoItemsContainer.appendChild(todoelement)
+    console.log(todoItemsContainer)
+
+    let inputelement = document.createElement("input")
+    inputelement.type = "checkbox"
+    inputelement.id = checkboxid
+
+    inputelement.onclick = function() {
+        ontodostatuschange(checkboxid, labelid)
+    }
+    inputelement.classList.add("checkbox-input")
+    todoelement.appendChild(inputelement)
+
+    let lablcontainer = document.createElement("div")
+    lablcontainer.classList.add("label-container", "d-flex", "flex-row")
+    todoelement.appendChild(lablcontainer)
+    let labelelement = document.createElement("label")
+    labelelement.setAttribute("for", checkboxid)
+    labelelement.id = labelid
+    labelelement.classList.add("checkbox-label")
+    labelelement.textContent = todo.text
+    lablcontainer.appendChild(labelelement)
+    let deleteiconcon = document.createElement("div")
+    deleteiconcon.classList.add("delete-icon-container")
+    lablcontainer.appendChild(deleteiconcon)
+    let icon = document.createElement("i")
+    icon.classList.add("far", "fa-trash-alt", "delete-icon")
+    icon.onclick = function() {
+        ondeletetodo(todoid)
+    }
+    deleteiconcon.appendChild(icon)
+}
+
+function onaddtodo() {
+    let todocount = todo.length
+    todocount = todocount + 1
+    let todoUserInput = document.getElementById("todoUserInput")
+    let usevalue = todoUserInput.value
+    if (usevalue === "") {
+        alert("enter valid  input")
+    }
+    let newtodo = {
+        text: usevalue,
+        uniqueno: todocount
+    }
+    createandappend(newtodo)
+    todoUserInput.value = ""
+
+}
+addtodobutton.onclick = function() {
+    onaddtodo()
+}
+
+for (let eahitem of todo) {
+    createandappend(eahitem)
+}
